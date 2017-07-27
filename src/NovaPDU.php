@@ -3,7 +3,7 @@
 namespace ZanPHP\NovaCodec;
 
 
-use ZanPHP\Codec\PDU;
+use ZanPHP\Contracts\Codec\PDU;
 use ZanPHP\Exception\Codec\CodecException;
 
 class NovaPDU implements PDU

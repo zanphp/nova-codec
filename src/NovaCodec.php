@@ -2,8 +2,8 @@
 
 namespace ZanPHP\NovaCodec;
 
-use ZanPHP\Codec\Codec;
-use ZanPHP\Codec\PDU;
+use ZanPHP\Contracts\Codec\Codec;
+use ZanPHP\Contracts\Codec\PDU;
 use ZanPHP\Exception\Codec\CodecException;
 
 class NovaCodec implements Codec
