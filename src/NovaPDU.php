@@ -16,38 +16,76 @@ class NovaPDU implements PDU
     public $attach;
     public $body;
 
+    private $useNewCodec;
+
+    public function __construct()
+    {
+        $this->useNewCodec = function_exists("nova_encode_new");
+    }
+
     public function encode()
     {
-        $r = nova_encode(
-            $this->serviceName,
-            $this->methodName,
-            $this->ip,
-            $this->port,
-            $this->seqNo,
-            $this->attach,
-            $this->body,
-            $outBuf
+        if ($this->useNewCodec) {
+            $outBuf = nova_encode_new(
+                $this->serviceName,
+                $this->methodName,
+                $this->ip,
+                $this->port,
+                $this->seqNo,
+                $this->attach,
+                $this->body
             );
-        if ($r === false) {
-            throw new CodecException();
+            if (!$outBuf) {
+                throw new CodecException();
+            }
+            return $outBuf;
+        } else {
+            $r = nova_encode(
+                $this->serviceName,
+                $this->methodName,
+                $this->ip,
+                $this->port,
+                $this->seqNo,
+                $this->attach,
+                $this->body,
+                $outBuf
+            );
+            if ($r === false) {
+                throw new CodecException();
+            }
+            return $outBuf;
         }
-        return $outBuf;
     }
 
     public function decode($bytesBuffer)
     {
-        $r = nova_decode(
-            $bytesBuffer,
-            $this->serviceName,
-            $this->methodName,
-            $this->ip,
-            $this->port,
-            $this->seqNo,
-            $this->attach,
-            $this->body
-        );
-        if ($r === false) {
-            throw new CodecException();
+        if ($this->useNewCodec) {
+            $arr = nova_decode_new($bytesBuffer);
+            if (!$arr) {
+                throw new CodecException();
+            }
+
+            $this->serviceName = $arr["sName"];
+            $this->methodName = $arr["mName"];
+            $this->ip = $arr["ip"];
+            $this->port = $arr["port"];
+            $this->seqNo = $arr["seqNo"];
+            $this->attach = $arr["attach"];
+            $this->body = $arr["data"];
+        } else {
+            $r = nova_decode(
+                $bytesBuffer,
+                $this->serviceName,
+                $this->methodName,
+                $this->ip,
+                $this->port,
+                $this->seqNo,
+                $this->attach,
+                $this->body
+            );
+            if ($r === false) {
+                throw new CodecException();
+            }
         }
     }
 }
