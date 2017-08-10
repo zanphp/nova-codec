@@ -16,16 +16,18 @@ class NovaPDU implements PDU
     public $attach;
     public $body;
 
-    private $useNewCodec;
+    private static $useNewCodec;
 
     public function __construct()
     {
-        $this->useNewCodec = function_exists("nova_encode_new");
+        if (self::$useNewCodec === null) {
+            self::$useNewCodec = function_exists("nova_encode_new");
+        }
     }
 
     public function encode()
     {
-        if ($this->useNewCodec) {
+        if (self::$useNewCodec) {
             $outBuf = nova_encode_new(
                 $this->serviceName,
                 $this->methodName,
@@ -59,7 +61,7 @@ class NovaPDU implements PDU
 
     public function decode($bytesBuffer)
     {
-        if ($this->useNewCodec) {
+        if (self::$useNewCodec) {
             $arr = nova_decode_new($bytesBuffer);
             if (!$arr) {
                 throw new CodecException();
