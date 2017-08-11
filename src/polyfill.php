@@ -114,7 +114,7 @@ namespace
          * @param string &$thriftBin nova body
          * @return bool
          */
-        function nova_decode_($buf, &$serv, &$method, &$ip, &$port, &$seq, &$attach, &$thriftBin)
+        function nova_decode($buf, &$serv, &$method, &$ip, &$port, &$seq, &$attach, &$thriftBin)
         {
             $pkt = nova_decode_new($buf);
             if ($pkt === false) {
@@ -146,7 +146,7 @@ namespace
          * @param string &$buf 打包结果
          * @return bool
          */
-        function nova_encode_($serv, $method, $ip, $port, $seq, $attach, $thriftBin, &$buf)
+        function nova_encode($serv, $method, $ip, $port, $seq, $attach, $thriftBin, &$buf)
         {
             $bin = nova_encode_new($serv, $method, $ip, $port, $seq, $attach, $thriftBin);
             if ($bin === false) {
@@ -157,7 +157,7 @@ namespace
         }
 
 
-        function is_nova_packet_($buf)
+        function is_nova_packet($buf)
         {
             $len = strlen($buf);
             if ($len < 37) {
@@ -171,18 +171,18 @@ namespace
             return $magic === 0xdabc;
         }
 
-        function nova_get_sequence_()
+        function nova_get_sequence()
         {
             static $seq = 0;
             return ++$seq;
         }
 
-        function nova_get_time_()
+        function nova_get_time()
         {
             return time();
         }
 
-        function nova_get_ip_()
+        function nova_get_ip()
         {
             $ipList = \swoole_get_local_ip();
             // FIX remove lookback ip
