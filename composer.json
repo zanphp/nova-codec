@@ -9,6 +9,7 @@
       "ZanPHP\\NovaCodec\\": "src"
     },
     "files": [
+      "src/polyfill.php"
     ]
   },
   "extra": {
