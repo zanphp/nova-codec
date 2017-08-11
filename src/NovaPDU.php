@@ -38,6 +38,7 @@ class NovaPDU implements PDU
                 $this->body
             );
             if (!$outBuf) {
+                sys_error("nova encode fail, novaPdu=" . print_r($this, true));
                 throw new CodecException();
             }
             return $outBuf;
@@ -53,6 +54,7 @@ class NovaPDU implements PDU
                 $outBuf
             );
             if ($r === false) {
+                sys_error("nova encode fail, novaPdu=" . print_r($this, true));
                 throw new CodecException();
             }
             return $outBuf;
@@ -64,6 +66,7 @@ class NovaPDU implements PDU
         if (self::$useNewCodec) {
             $arr = nova_decode_new($bytesBuffer);
             if (!$arr) {
+                sys_error("nova decode fail, rawHex=" . bin2hex($bytesBuffer));
                 throw new CodecException();
             }
 
@@ -86,6 +89,7 @@ class NovaPDU implements PDU
                 $this->body
             );
             if ($r === false) {
+                sys_error("nova decode fail, rawHex=" . bin2hex($bytesBuffer));
                 throw new CodecException();
             }
         }
