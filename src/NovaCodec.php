@@ -25,10 +25,11 @@ class NovaCodec implements Codec
 
     /**
      * @param string $bytesBuffer
+     * @param mixed $ctx
      * @return NovaPDU
      * @throws \ZanPHP\Exception\Codec\CodecException
      */
-    public function decode($bytesBuffer)
+    public function decode($bytesBuffer, $ctx = null)
     {
         $pdu = new NovaPDU();
         $pdu->decode($bytesBuffer);
